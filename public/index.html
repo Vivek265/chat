@@ -3,10 +3,23 @@
     <script src="./socket.io.js"></script>
     <script src="./jquery.js"></script>
     </head>
-    <body>ysdfksdf
+    <body> <form action="">
+        <input type="text" id="txt"><button type="button" id="send"></button>
+    </form>
+    <span id="msg"></span>
         <script>
             $(function(){
                 var socket=io();
+                $('#send').click(function{
+                    var msg={
+                        to:'',
+                        txt:$('#txt').val()
+                    };
+                    socket.emit('chat',msg);
+                });
+                socket.on('chat message',function(msg){
+                    $('#msg').html(msg.txt);
+                });
             });
         </script>
     </body>

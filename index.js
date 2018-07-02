@@ -2,8 +2,8 @@ var express=require('express');
 var bodyParser=require('body-parser');
 var path=require('path');
 var app=express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var server = app.listen(4200)
+var io = require('socket.io').listen(server);
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -15,7 +15,10 @@ app.get('/',(req,res)=>{
 });
 io.on('connection',(socket)=>{
 console.log('connected');
+socket.on('disconnect',()=>{
+    console.log('user disconnected')
 });
-app.listen(4200,()=>{
-    console.log('listening');
-})
+socket.on('chat',(msg)=>{
+    socket.broadcast.emit('chat message',msg);
+});
+});
