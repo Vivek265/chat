@@ -2,7 +2,8 @@ var express=require('express');
 var bodyParser=require('body-parser');
 var path=require('path');
 var app=express();
-var server = app.listen(4200)
+var port=process.env.PORT || 8080;
+var server = app.listen(port)
 var io = require('socket.io').listen(server);
 app.use(bodyParser.json());
 
