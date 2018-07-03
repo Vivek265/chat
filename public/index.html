@@ -1,16 +1,21 @@
 <html>
     <head>
+    <link rel="stylesheet" href="./bootstrap.css">
     <script src="./socket.io.js"></script>
     <script src="./jquery.js"></script>
     </head>
-    <body> <form action="">
-        <input type="text" id="txt"><button type="button" id="send"></button>
-    </form>
-    <span id="msg"></span>
+    <body> 
+            <div id="msg"></div>
+            <div class="row">
+
+            <div class="col-md-4"><form action="" >
+        <input type="text" id="txt" class='form-control' ><button type="button" id="send" class="btn btn-success" style='float:right'>send</button>
+    </form></div>
+</div>    
         <script>
             $(function(){
                 var socket=io();
-                $('#send').click(function{
+                $('#send').click(function(){
                     var msg={
                         to:'',
                         txt:$('#txt').val()
@@ -18,7 +23,7 @@
                     socket.emit('chat',msg);
                 });
                 socket.on('chat message',function(msg){
-                    $('#msg').html(msg.txt);
+                    $('#msg').append("<br>"+msg.txt);
                 });
             });
         </script>
