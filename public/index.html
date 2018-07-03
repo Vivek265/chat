@@ -15,7 +15,7 @@
         <script>
             $(function(){
                 var socket=io();
-                $("#snd").submit(function(){
+                $("#snd").submit(function(event){
                     var msg={
                         to:'',
                         txt:$('#txt').val()
@@ -23,6 +23,8 @@
                     socket.emit('chat',msg);
                     $("#txt").val('');
                     return false;
+                    event.preventDefault();
+
                 
                 });
                 $('#send').click(function(){
