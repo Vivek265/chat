@@ -7,36 +7,36 @@
     <body> 
             <div id="msg"></div>
             <div class="row">
-
-            <div class="col-md-4"><form action="" id="snd" >
-        <input type="text" id="txt" class='form-control' ><button type="button" id="send" class="btn btn-success" style='float:right'>send</button>
-    </form></div>
+<div class ="vid"  height="400" width="400" style="background-color:grey;position: relative; left:500px;top:200px;"><video id="video" height="250" width="350" autoplay></video></div>
+            <div class="col-md-4">
+        <button type="button" id="send" class="btn btn-success" style='float:right'>send</button>
+    </div>
 </div>    
         <script>
             $(function(){
+                var video=$("#video");
+                navigator.getMedia=navigator.getUserMedia;
+                var vendor=window.URL
                 var socket=io();
-                $("#snd").submit(function(event){
-                    var msg={
-                        to:'',
-                        txt:$('#txt').val()
-                    };
-                    socket.emit('chat',msg);
-                    $("#txt").val('');
-                    return false;
-                    event.preventDefault();
 
-                
-                });
-                $('#send').click(function(){
-                    var msg={
-                        to:'',
-                        txt:$('#txt').val()
-                    };
-                    socket.emit('chat',msg);
-                    $("#txt").val('');
+                $('#send').click(function(){ var msg;
+                    navigator.getMedia({
+                        video:true,
+                        audio:false
+                    },function(stream){
+                        msg=vendor.createObjectURL(stream);
+                        socket.emit('chat',msg);
+                    },function(err)
+                    {
+                        console.log(err);
+                    }
+                    
+                );
+                    
+                    
                 });
                 socket.on('chat message',function(msg){
-                    $('#msg').append("<br>"+msg.txt);
+                    video.src=msg;
                 });
             });
         </script>
