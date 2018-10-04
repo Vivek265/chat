@@ -4,39 +4,40 @@
     <script src="./socket.io.js"></script>
     <script src="./jquery.js"></script>
     </head>
-    <body> 
+    <body><div id="log">
+        <form  action="" id="login"><input type="text" id="name" class="form-control">
+            <button type="button" id="lg" class="btn btn-success" style='float:left'>Login</button>
+        </form>
+    </div><br><br><br><br>
             <div id="msg"></div>
             <div class="row">
 
-            <div class="col-md-4"><form action="" id="snd" >
-        <input type="text" id="txt" class='form-control' ><button type="button" id="send" class="btn btn-success" style='float:right'>send</button>
-    </form></div>
+            <div class="col-md-4" id="chat-box" style="display: none;"><form action="" id="snd"  ><input type="text" id="to" class='form-control'> 
+        <input type="text" id="txt" class='form-control'> <button type="button" id="send" class="btn btn-success" style='float:right'>send</button>
+   </form> </div>
 </div>    
         <script>
             $(function(){
                 var socket=io();
-                $("#snd").submit(function(event){
-                    var msg={
-                        to:'',
-                        txt:$('#txt').val()
-                    };
-                    socket.emit('chat',msg);
-                    $("#txt").val('');
-                    return false;
-                    event.preventDefault();
-
                 
-                });
                 $('#send').click(function(){
                     var msg={
-                        to:'',
+                        from:'',
+                        to:$('#to').val(),
                         txt:$('#txt').val()
                     };
                     socket.emit('chat',msg);
-                    $("#txt").val('');
+                    $("#txt").val('');$('#to').val('');
                 });
                 socket.on('chat message',function(msg){
-                    $('#msg').append("<br>"+msg.txt);
+                    $('#msg').append("<br>"+msg.from+":"+msg.txt);
+                });
+                $('#lg').click(function(){
+                    
+                    socket.emit('login',$('#name').val());
+                    $("#log").hide();
+                    $("#chat-box").show();
+                    
                 });
             });
         </script>
